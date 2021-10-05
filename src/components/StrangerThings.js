@@ -7,13 +7,14 @@ const getRealityClass = (hereIsTheUpsideDownWorld) => (
 );
 
 const strangerThingsConfig = {
-  url: 'http://localhost:3002',
-  timeout: 30000,
+  // url: 'http://localhost:3002',
+  url: process.env.REACT_APP_HAWKINS_URL,
+  timeout: process.env.REACT_APP_HAWKINS_TIMEOUT,
 };
 
 const upsideDownConfig = {
-  url: 'http://localhost:3003',
-  timeout: 30000,
+  url: process.env.REACT_APP_UPSIDEDOWN_URL,
+  timeout: process.env.REACT_APP_UPSIDEDOWN_TIMEOUT,
 };
 
 const charactersService = new CharactersService(strangerThingsConfig);
@@ -73,6 +74,7 @@ class StrangerThings extends React.Component {
     service
       .getCharacters(characterName, pages || page, numberOfPages)
       .then(({ data: characters }) => {
+        console.log(characters);
         this.setState({
           characters,
         });
@@ -107,45 +109,50 @@ class StrangerThings extends React.Component {
     const {
       hereIsTheUpsideDownWorld, characterName, characters, page,
     } = this.state;
+    const status = process.env.REACT_APP_STATUS;
+    console.log(status);
     return (
-      <div
-        className={ `reality ${getRealityClass(
-          hereIsTheUpsideDownWorld,
-        )}` }
-      >
-        <div className="content strangerfy">
-          <div className="change-reality">
-            <button type="button" onClick={ this.changeRealityClick }>
-              {' '}
-              Mudar de Realidade
-            </button>
-          </div>
-
-          <div>
-            <input
-              placeholder="Nome do Personagem"
-              onChange={ this.handleInput }
-              value={ characterName }
-            />
-            <button type="button" onClick={ this.searchClick }>Pesquisar</button>
-          </div>
-
-          <div>
-            <Table characters={ characters } />
-          </div>
-
-          <div>
-            <p>
-              Página atual:
-              {page}
-            </p>
-          </div>
-          <div>
-            <button type="button" onClick={ this.previousPage }>Anterior</button>
-            <button type="button" onClick={ this.nextPage }>Próximo</button>
+      <>
+        <h3 hidden>
+          {' '}
+          {status}
+        </h3>
+        <div
+          className={ `reality ${getRealityClass(
+            hereIsTheUpsideDownWorld,
+          )}` }
+        >
+          <div className="content strangerfy">
+            <div className="change-reality">
+              <button type="button" onClick={ this.changeRealityClick }>
+                {' '}
+                Mudar de Realidade
+              </button>
+            </div>
+            <div>
+              <input
+                placeholder="Nome do Personagem"
+                onChange={ this.handleInput }
+                value={ characterName }
+              />
+              <button type="button" onClick={ this.searchClick }>Pesquisar</button>
+            </div>
+            <div>
+              <Table characters={ characters } />
+            </div>
+            <div>
+              <p>
+                Página atual:
+                {page}
+              </p>
+            </div>
+            <div>
+              <button type="button" onClick={ this.previousPage }>Anterior</button>
+              <button type="button" onClick={ this.nextPage }>Próximo</button>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
