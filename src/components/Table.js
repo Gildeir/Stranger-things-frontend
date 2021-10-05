@@ -14,6 +14,9 @@ class Table extends React.Component {
           </tr>
         </thead>
         <tbody>
+          {
+            console.log(` chars: ${characters}`)
+          }
           {characters.map((char) => (
             <tr key={ char.name }>
               <td>{char.name}</td>
